@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+}
+
+group 'ru.r5am'
+version '0.1.0'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'org.apache.commons', name: 'commons-compress', version: '1.19'
+
+    testCompile group: 'org.testng', name: 'testng', version: '7.0.0'
+
+}
