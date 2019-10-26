@@ -1,19 +1,25 @@
-plugins {
-    id 'java'
-}
-
 group 'ru.r5am'
 version '0.1.0'
 
-sourceCompatibility = 1.8
+apply plugin: "java"
+apply plugin: 'application'
+
+defaultTasks "run"
+
+mainClassName = "Main"
+sourceCompatibility = JavaVersion.VERSION_1_8
+
+[compileJava, compileTestJava]*.options*.encoding = "UTF-8"
+
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compile group: 'org.apache.commons', name: 'commons-compress', version: '1.19'
+    compile "org.apache.commons:commons-compress:1.19"
+    compile "org.apache.logging.log4j:log4j-core:2.12.1"
+    compile "org.aeonbits.owner:owner:1.0.10"
 
-    testCompile group: 'org.testng', name: 'testng', version: '7.0.0'
-
+    testCompile "org.testng:testng:7.0.0"
 }
