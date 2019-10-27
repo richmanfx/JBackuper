@@ -35,6 +35,9 @@ dependencies {
     compile "org.aeonbits.owner:owner:1.0.10"
     compile "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.10.0"
     compile "com.fasterxml.jackson.core:jackson-databind:2.10.0"
+    compile "org.apache.commons:commons-compress:1.19"
+    compile group: 'org.tukaani', name: 'xz', version: '1.8'
+    compile "org.projectlombok:lombok:1.18.10"
 
     testCompile "org.testng:testng:7.0.0"
 }

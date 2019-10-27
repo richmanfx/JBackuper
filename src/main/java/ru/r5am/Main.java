@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.aeonbits.owner.ConfigFactory;
 
 import static ru.r5am.ReadConfig.readConfig;
+import static ru.r5am.Archive.lzmaArchive;
 
 public class Main {
 
@@ -16,8 +17,11 @@ public class Main {
         Map<String, Map<String,String>> backupConfig = readConfig(appConfig.backupsConfigFileName());
 
         // Архивировать
+        lzmaArchive(backupConfig);
 
     }
+
+
 
 
 }

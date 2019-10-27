@@ -1,10 +1,11 @@
 package ru.r5am;
 
 import java.util.Map;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.nio.file.Path;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
@@ -33,7 +34,7 @@ class ReadConfig {
         Path currentDir = ApplicationStartUpPath.getAppStartUpPath();
 
         try {
-            inputStream = new FileInputStream(currentDir + "/" + backupsConfigFileName);
+            inputStream = Files.newInputStream(Paths.get(currentDir + "/" + backupsConfigFileName));
         } catch (FileNotFoundException ex) {
             log.error("File '{}' not found", currentDir + "/" + backupsConfigFileName);
 
@@ -48,7 +49,7 @@ class ReadConfig {
 
         backupsConfig = objectMapper.readValue(inputStream, new TypeReference<Map<String, Map<String,String>>>() {
         });
-        log.debug("Backups YAML-config: {}", backupsConfig);
+        log.info("Backups YAML-config: {}", backupsConfig);
 
         return backupsConfig;
     }
