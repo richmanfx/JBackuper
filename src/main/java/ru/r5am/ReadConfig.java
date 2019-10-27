@@ -51,7 +51,7 @@ class ReadConfig {
 
         backupsConfig = objectMapper.readValue(inputStream, new TypeReference<Map<String, Map<String,String>>>() {
         });
-        log.info("Backups YAML-config: {}", backupsConfig);
+        log.debug("Backups YAML-config: {}", backupsConfig);
 
         return backupsConfig;
     }

@@ -3,10 +3,12 @@ package ru.r5am;
 import java.io.*;
 import java.util.Map;
 import lombok.Cleanup;
-import java.nio.file.Path;
+import java.util.Date;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import org.apache.logging.log4j.Logger;
+import org.aeonbits.owner.ConfigFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
@@ -18,6 +20,7 @@ class Archive {
     private Archive(){}
 
     private static final Logger log = LogManager.getLogger();
+    private static final AppConfig appConfig = ConfigFactory.create(AppConfig.class);
 
     /**
      * Собрать файлы в TAR-пакет
@@ -115,7 +118,7 @@ class Archive {
                     oneBackupConf.getValue().get("To") + File.separator +
                     oneBackupConf.getValue().get("OutFileName") + ".tar";
 
-            String lzmaFileName = tarFileName + ".lzma";
+            String lzmaFileName = getCompressedName(oneBackupConf);
 
             @Cleanup InputStream inputStream = Files.newInputStream(Paths.get(tarFileName));
 
@@ -134,6 +137,23 @@ class Archive {
             Files.delete(Paths.get(tarFileName));
 
         }
+    }
+
+    private static String getCompressedName(Map.Entry<String, Map<String, String>> oneBackupConf) {
+
+        String compressedFileName;
+
+        String withoutExtFileName = oneBackupConf.getValue().get("To") + File.separator +
+                                    oneBackupConf.getValue().get("OutFileName");
+
+        if (oneBackupConf.getValue().get("DateTime").equals("false")) {
+            compressedFileName = withoutExtFileName + ".tar.lzma";
+        } else {
+            SimpleDateFormat formatForDateNow = new SimpleDateFormat(appConfig.dateTimeFormat());
+            compressedFileName = withoutExtFileName + "-" + formatForDateNow.format(new Date()) + ".tar.lzma";
+        }
+
+        return compressedFileName;
     }
 
 }
