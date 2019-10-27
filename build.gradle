@@ -30,6 +30,8 @@ repositories {
 }
 
 dependencies {
+    testCompile "org.testng:testng:7.0.0"
+
     compile "org.apache.commons:commons-compress:1.19"
     compile "org.apache.logging.log4j:log4j-core:2.12.1"
     compile "org.aeonbits.owner:owner:1.0.10"
@@ -39,5 +41,4 @@ dependencies {
     compile group: 'org.tukaani', name: 'xz', version: '1.8'
     compile "org.projectlombok:lombok:1.18.10"
 
-    testCompile "org.testng:testng:7.0.0"
 }

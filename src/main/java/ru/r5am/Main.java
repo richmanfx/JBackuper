@@ -4,8 +4,8 @@ import java.util.Map;
 import java.io.IOException;
 import org.aeonbits.owner.ConfigFactory;
 
+import static ru.r5am.Archive.*;
 import static ru.r5am.ReadConfig.readConfig;
-import static ru.r5am.Archive.lzmaArchive;
 
 public class Main {
 
@@ -14,14 +14,14 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
         // Считать конфигурационные данные
-        Map<String, Map<String,String>> backupConfig = readConfig(appConfig.backupsConfigFileName());
+        Map<String, Map<String,String>> backupsConfig = readConfig(appConfig.backupsConfigFileName());
+
+        // Собрать TAR
+        toTar(backupsConfig);
 
         // Архивировать
-        lzmaArchive(backupConfig);
+//        lzmaArchive(backupsConfig);
 
     }
-
-
-
 
 }
