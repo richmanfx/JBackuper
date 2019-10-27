@@ -3,7 +3,7 @@
 backup1:
   From: "/home/zoer/Elixir"
   To: "/home/zoer/Backups"
-  FileName: "ElixirBackup.jb"
+  OutFileName: "ElixirBackup"
   Crypt: "false"
   DateTime: "false"
   Ssh: "false"
@@ -12,7 +12,7 @@ backup1:
 backup2:
   From: "/home/zoer/AsmProjects"
   To: "/home/zoer/Backups"
-  FileName: "AsmBackup.jb"
+  OutFileName: "AsmBackup"
   Crypt: "false"
   DateTime: "false"
   Ssh: "false"

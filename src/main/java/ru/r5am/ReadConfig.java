@@ -1,13 +1,15 @@
 package ru.r5am;
 
+import java.io.File;
 import java.util.Map;
+import java.nio.file.Path;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.nio.file.Path;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.FileNotFoundException;
 import org.apache.logging.log4j.Logger;
+import java.nio.file.NoSuchFileException;
 import org.apache.logging.log4j.LogManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -34,8 +36,8 @@ class ReadConfig {
         Path currentDir = ApplicationStartUpPath.getAppStartUpPath();
 
         try {
-            inputStream = Files.newInputStream(Paths.get(currentDir + "/" + backupsConfigFileName));
-        } catch (FileNotFoundException ex) {
+            inputStream = Files.newInputStream(Paths.get(currentDir + File.separator + backupsConfigFileName));
+        } catch (FileNotFoundException | NoSuchFileException ex) {
             log.error("File '{}' not found", currentDir + "/" + backupsConfigFileName);
 
             if (System.getProperty("os.name").toLowerCase().contains("win")) {

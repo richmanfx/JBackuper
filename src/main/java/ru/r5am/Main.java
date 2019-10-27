@@ -20,7 +20,7 @@ public class Main {
         toTar(backupsConfig);
 
         // Архивировать
-//        lzmaArchive(backupsConfig);
+        lzmaArchive(backupsConfig);
 
     }
 

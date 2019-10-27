@@ -18,7 +18,6 @@ class Archive {
     private Archive(){}
 
     private static final Logger log = LogManager.getLogger();
-    private static Path currentDir = ApplicationStartUpPath.getAppStartUpPath();
 
     /**
      * Собрать файлы в TAR-пакет
@@ -31,7 +30,8 @@ class Archive {
 
             String sourceDir = oneBackupConf.getValue().get("From");
             String destFileName =
-                    oneBackupConf.getValue().get("To") + File.separator + oneBackupConf.getValue().get("FileName");
+                    oneBackupConf.getValue().get("To") + File.separator +
+                    oneBackupConf.getValue().get("OutFileName") + ".tar";
 
             // Кастомизированный выходной TAR-поток
             TarArchiveOutputStream out = getTarArchiveOutputStream(destFileName);
@@ -99,27 +99,41 @@ class Archive {
 
     /**
      * Сжать файл с алгоритмом LZMA
-     * @param backupConfig Конфигурационные данные бекапов
+     * @param backupsConfig Конфигурационные данные бекапов
      * @throws IOException При ошибказ записи в поток
      */
-    static void lzmaArchive(Map<String, Map<String, String>> backupConfig) throws IOException {
+    static void lzmaArchive(Map<String, Map<String, String>> backupsConfig) throws IOException {
 
-        int bufferSize = 4096;
-        final byte[] buffer = new byte[bufferSize];
-//        Path currentDir = ApplicationStartUpPath.getAppStartUpPath();
-        log.info("Start!");
-        @Cleanup InputStream inputStream = Files.newInputStream(Paths.get(currentDir.toString(), "Музыка.tar"));
-        OutputStream outputStream = Files.newOutputStream(Paths.get(currentDir.toString(), "Музыка.tar.lzma"));
-        BufferedOutputStream out = new BufferedOutputStream(outputStream);
-        LZMACompressorOutputStream lzOut = new LZMACompressorOutputStream(out);
 
-        int n = 0;
-        while (-1 != (n = inputStream.read(buffer))) {
-            lzOut.write(buffer, 0, n);
+
+        for (Map.Entry<String, Map<String, String>> oneBackupConf : backupsConfig.entrySet()) {
+
+            // TODO: Здесь раскидать на разные потоки
+            final byte[] buffer = new byte[4096];   // TODO: От балды размер пока
+
+            String tarFileName =
+                    oneBackupConf.getValue().get("To") + File.separator +
+                    oneBackupConf.getValue().get("OutFileName") + ".tar";
+
+            String lzmaFileName = tarFileName + ".lzma";
+
+            @Cleanup InputStream inputStream = Files.newInputStream(Paths.get(tarFileName));
+
+            OutputStream outputStream = Files.newOutputStream(Paths.get(lzmaFileName));
+            BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
+            LZMACompressorOutputStream lzmaOutStream = new LZMACompressorOutputStream(bufferedOutputStream);
+
+            int n;
+            while (-1 != (n = inputStream.read(buffer))) {
+                lzmaOutStream.write(buffer, 0, n);
+            }
+
+            lzmaOutStream.close();
+
+            // Удалить исходный TAR-файл
+            Files.delete(Paths.get(tarFileName));
+
         }
-
-        lzOut.close();
-        log.info("Готово!");
     }
 
 }
