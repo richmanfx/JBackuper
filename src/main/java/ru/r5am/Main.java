@@ -22,6 +22,9 @@ public class Main {
         // Архивировать
         lzmaArchive(backupsConfig);
 
+        // Перенести в место назначения
+        moveArchiveFiles(backupsConfig);
+
     }
 
 }

@@ -32,9 +32,7 @@ class Archive {
             log.debug("Бэкап: {} => конфиг: {}", oneBackupConf.getKey(), oneBackupConf.getValue());
 
             String sourceDir = oneBackupConf.getValue().get("From");
-            String destFileName =
-                    oneBackupConf.getValue().get("To") + File.separator +
-                    oneBackupConf.getValue().get("OutFileName") + ".tar";
+            String destFileName = oneBackupConf.getValue().get("OutFileName") + ".tar";
 
             // Кастомизированный выходной TAR-поток
             TarArchiveOutputStream out = getTarArchiveOutputStream(destFileName);
@@ -114,9 +112,7 @@ class Archive {
             // TODO: Здесь раскидать на разные потоки
             final byte[] buffer = new byte[4096];   // TODO: От балды размер пока
 
-            String tarFileName =
-                    oneBackupConf.getValue().get("To") + File.separator +
-                    oneBackupConf.getValue().get("OutFileName") + ".tar";
+            String tarFileName = oneBackupConf.getValue().get("OutFileName") + ".tar";
 
             String lzmaFileName = getCompressedName(oneBackupConf);
 
@@ -143,8 +139,7 @@ class Archive {
 
         String compressedFileName;
 
-        String withoutExtFileName = oneBackupConf.getValue().get("To") + File.separator +
-                                    oneBackupConf.getValue().get("OutFileName");
+        String withoutExtFileName = oneBackupConf.getValue().get("OutFileName");
 
         if (oneBackupConf.getValue().get("DateTime").equals("false")) {
             compressedFileName = withoutExtFileName + ".tar.lzma";
@@ -154,6 +149,26 @@ class Archive {
         }
 
         return compressedFileName;
+    }
+
+    static void moveArchiveFiles(Map<String, Map<String, String>> backupsConfig) {
+
+        for (Map.Entry<String, Map<String, String>> oneBackupConf : backupsConfig.entrySet()) {
+
+            // Исходный файл
+            String sourceFileName = getCompressedName(oneBackupConf);
+            File sourceFile = new File(sourceFileName);
+
+            // Файл назначения
+            String destFileName = oneBackupConf.getValue().get("To") + File.separator + sourceFileName;
+            File destFile = new File(destFileName);
+
+            boolean status = sourceFile.renameTo(destFile);
+            if (!status) {
+                log.error("Error while transferring the file to '{}'", destFileName);
+            }
+
+        }
     }
 
 }
