@@ -151,7 +151,7 @@ class Archive {
         return compressedFileName;
     }
 
-    static void moveArchiveFiles(Map<String, Map<String, String>> backupsConfig) {
+    static void moveArchiveFiles(Map<String, Map<String, String>> backupsConfig) throws IOException {
 
         for (Map.Entry<String, Map<String, String>> oneBackupConf : backupsConfig.entrySet()) {
 
@@ -163,10 +163,7 @@ class Archive {
             String destFileName = oneBackupConf.getValue().get("To") + File.separator + sourceFileName;
             File destFile = new File(destFileName);
 
-            boolean status = sourceFile.renameTo(destFile);
-            if (!status) {
-                log.error("Error while transferring the file to '{}'", destFileName);
-            }
+            Files.move(sourceFile.toPath(), destFile.toPath());
 
         }
     }
